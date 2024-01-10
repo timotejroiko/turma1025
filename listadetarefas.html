@@ -1,0 +1,36 @@
+<html>
+    <body>
+        <input placeholder="nome">
+        <br>
+        <input placeholder="tarefa">
+        <br>
+        <button>adicionar</button>
+        <br>
+        <div id="tarefas"></div>
+    </body>
+    <script>
+        const lista = document.getElementById("tarefas");
+        const nome = "abc";
+        const tarefa = "xyz";
+
+        // forma mais completa
+        // const elementonovo = document.createElement("div");
+        // const nomenovo = document.createElement("h2");
+        // nomenovo.textContent = nome;
+        // const pnovo = document.createElement("p");
+        // pnovo.textContent = tarefa;
+        // elementonovo.appendChild(nomenovo);
+        // elementonovo.appendChild(pnovo);
+        // lista.appendChild(elementonovo);
+
+        // forma intermedia
+        // const elementonovo = document.createElement("div");
+        // const htmldatarefa = `<div><h2>${nome}</h2><p>${tarefa}</p>`;
+        // elementonovo.innerHTML = htmldatarefa;
+        // lista.appendChild(elementonovo);
+
+        // forma gambiarra
+        // const htmldatarefa = `<div><h2>${nome}</h2><p>${tarefa}</p>`;
+        // lista.innerHTML = `${lista.innerHTML}<br>${htmldatarefa}</div>`;
+    </script>
+</html>
