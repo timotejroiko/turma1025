@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 const p = document.querySelector("p");
 const i = document.querySelector("input");
 

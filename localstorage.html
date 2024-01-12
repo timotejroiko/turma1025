@@ -1,0 +1,21 @@
+<html>
+    <body>
+        <textarea id="texto"></textarea>
+        <br>
+        <button id="limpar">Limpar</button>
+    </body>
+    <script>
+        const texto = document.querySelector("#texto");
+        texto.value = localStorage.getItem("texto");
+        texto.addEventListener("input", () => {
+            const valor = texto.value;
+            localStorage.setItem("texto", valor);
+        });
+
+        const botao = document.querySelector("#limpar");
+        botao.addEventListener("click", () => {
+            localStorage.removeItem("texto");
+            texto.value = "";
+        });
+    </script>
+</html>

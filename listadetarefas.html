@@ -1,17 +1,92 @@
 <html>
+    <head>
+        <style>
+            .tarefa {
+                border: 1px solid gray;
+                margin: 10px;
+                padding: 10px;
+                border-radius: 10px;
+                box-shadow: 0 0 5px -1px black;
+                background-color: beige;
+            }
+
+            .tarefa.completa {
+                background-color: lightgreen;
+            }
+
+            .tarefa h2 {
+                margin: 5px;
+            }
+
+            .tarefa p {
+                margin: 5px;
+                margin-bottom: 10px;
+            }
+
+            .tarefa button {
+                margin: 5px;
+                cursor: pointer;
+                background-color: lightsalmon;
+                border: none;
+                box-shadow: 0px 3px 4px -1px black;
+                transform: translate(0px, -2px);
+            }
+
+            .tarefa button:active {
+                box-shadow: none;
+                transform: none;
+            }
+        </style>
+    </head>
     <body>
-        <input placeholder="nome">
+        <input id="nome" placeholder="nome">
         <br>
-        <input placeholder="tarefa">
+        <input id="tarefa" placeholder="tarefa">
         <br>
-        <button>adicionar</button>
+        <button id="adicionar">adicionar</button>
         <br>
         <div id="tarefas"></div>
     </body>
     <script>
         const lista = document.getElementById("tarefas");
-        const nome = "abc";
-        const tarefa = "xyz";
+        const botao = document.querySelector("#adicionar");
+
+        lista.addEventListener("click", evento => {
+            const alvo = evento.target;
+            if(alvo.textContent === "Completar") {
+                const tarefa = alvo.parentElement;
+                tarefa.classList.add("completa");
+            } else if(alvo.textContent === "Remover") {
+                const tarefa = alvo.parentElement;
+                tarefa.remove();
+            }
+        });
+
+        botao.addEventListener("click", () => {
+            const nome = document.querySelector("#nome").value;
+            const tarefa = document.querySelector("#tarefa").value;
+
+            const elementonovo = document.createElement("div");
+            elementonovo.classList.add("tarefa");
+
+            const nomenovo = document.createElement("h2");
+            nomenovo.textContent = nome;
+
+            const descricaonova = document.createElement("p");
+            descricaonova.textContent = tarefa;
+
+            const botao1 = document.createElement("button");
+            botao1.textContent = "Completar";
+
+            const botao2 = document.createElement("button");
+            botao2.textContent = "Remover";
+
+            elementonovo.appendChild(nomenovo);
+            elementonovo.appendChild(descricaonova);
+            elementonovo.appendChild(botao1);
+            elementonovo.appendChild(botao2);
+            lista.appendChild(elementonovo);
+        });
 
         // forma mais completa
         // const elementonovo = document.createElement("div");

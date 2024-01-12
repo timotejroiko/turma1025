@@ -1,0 +1,13 @@
+<html>
+    <body>
+        <button>abre</button>
+    </body>
+    <script>
+        const botao = document.querySelector("button");
+        botao.addEventListener("click", () => {
+            const janela = window.open("", "janela nova", "height=300,width=300");
+            janela.document.body.innerHTML = `<p>plataforma: ${navigator.platform}</p>`;
+            janela.resizeTo(800, 800);
+        });
+    </script>
+</html>

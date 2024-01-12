@@ -1,5 +1,5 @@
 
-document // a raiz da pagina
+document // a raiz da pagina (DOM)
 
 // seletores
 
@@ -64,7 +64,9 @@ elemento.lastElementChild // ultimo elemento contido
 
 elemento.children // retorna todos os elementos contidos
 
-// versao node dos mesmos atributos
+// versao node da mesma coisa
+// um element é elemento html, que é um tipo de node
+// um node pode nao ser html, pode ser texto solto, xml e outras coisas
 elemento.parentNode
 elemento.nextSibling
 elemento.previousSibling
@@ -83,7 +85,7 @@ elemento.setAttribute("atributo3", "valor3") // cria um novo atributo
 elemento.attributes() // retorna uma lista de atributos
 
 
-// classList
+// classes
 
 elemento.classList.add("minhaclasse") // adiciona uma classe
 elemento.classList.remove("minhaclasse") // remove uma classe
