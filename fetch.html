@@ -1,23 +1,39 @@
 <html>
     <body>
+        <input id="pokemon">
         <button id="carregar">carregar</button>
+        <button id="limpar">limpar</button>
         <p id="resultado"></p>
     </body>
     <script>
         const botao = document.getElementById("carregar");
         const resultado = document.getElementById("resultado");
+        const pokemon = document.getElementById("pokemon");
         botao.addEventListener("click", () => {
-            fetch("https://pokeapi.co/api/v2/pokemon/pikachu").then(resposta => {
-                return resposta.json();
+            const valor = pokemon.value.toLowerCase();
+            fetch(`https://pokeapi.co/api/v2/pokemon/${valor}`).then(resposta => {
+                if(resposta.status !== 200) {
+                    throw new Error("pokemon nao encontrado");
+                } else {
+                    return resposta.json();
+                }
             }).then(json => {
+                console.log(json);
                 resultado.innerHTML = `
+                    <img src="${json.sprites.front_default}"><br>
                     Nome: ${json.name}<br>
                     Altura: ${json.height}<br>
                     Peso: ${json.weight}
-                `
+                `;
+            }).catch(erro => {
+                resultado.innerHTML = erro;
             });
         });
 
-        resultado.innerHTML = "abc";
+        const botao2 = document.getElementById("limpar");
+        botao2.addEventListener("click", () => {
+            resultado.innerHTML = "";
+            pokemon.value = "";
+        });
     </script>
 </html>
