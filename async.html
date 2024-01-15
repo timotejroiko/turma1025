@@ -1,0 +1,41 @@
+<html>
+    <body></body>
+    <script>
+        // callbacks
+        buscarCliente("540", cliente => {
+            buscarCarro(cliente.idDoCarro1, carro1 => {
+                buscarCarro(cliente.idDoCarro2, carro2 => {
+                    buscarCarro(cliente.idDoCarro3, carro3 => {
+                        const carros = [carro1, carro2, carro3];
+                        buscarMultas(carro[0].placa, multas1 => {
+                            buscarMultas(carro[1].placa, multas2 => {
+                                buscarMultas(carro[2].placa, multas3 => {
+                                    const multas = [multas1, multas2, multas3];
+                                })
+                            })
+                        })
+                    });
+                });
+            });
+        });
+
+        // promessas
+        buscarCliente("540").then(cliente => {
+            const array = [
+                buscarCarro(cliente.idDoCarro1),
+                buscarCarro(cliente.idDoCarro2),
+                buscarCarro(cliente.idDoCarro3)
+            ];
+            return Promise.all(array);
+        }).then(trescarros => {
+            const array = [
+                buscarMulta(trescarros[0].placa),
+                buscarMulta(trescarros[1].placa),
+                buscarMulta(trescarros[2].placa),
+            ];
+            return Promise.all(array);
+        }).then(multas => {
+            
+        });
+    </script>
+</html>

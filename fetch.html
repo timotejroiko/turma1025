@@ -1,0 +1,23 @@
+<html>
+    <body>
+        <button id="carregar">carregar</button>
+        <p id="resultado"></p>
+    </body>
+    <script>
+        const botao = document.getElementById("carregar");
+        const resultado = document.getElementById("resultado");
+        botao.addEventListener("click", () => {
+            fetch("https://pokeapi.co/api/v2/pokemon/pikachu").then(resposta => {
+                return resposta.json();
+            }).then(json => {
+                resultado.innerHTML = `
+                    Nome: ${json.name}<br>
+                    Altura: ${json.height}<br>
+                    Peso: ${json.weight}
+                `
+            });
+        });
+
+        resultado.innerHTML = "abc";
+    </script>
+</html>
