@@ -15,18 +15,16 @@
                 if(resposta.status !== 200) {
                     throw new Error("pokemon nao encontrado");
                 } else {
-                    return resposta.json();
+                    resposta.json().then(json => {
+                        console.log(json);
+                        resultado.innerHTML = `
+                            <img src="${json.sprites.front_default}"><br>
+                            Nome: ${json.name}<br>
+                            Altura: ${json.height}<br>
+                            Peso: ${json.weight}
+                        `;
+                    });
                 }
-            }).then(json => {
-                console.log(json);
-                resultado.innerHTML = `
-                    <img src="${json.sprites.front_default}"><br>
-                    Nome: ${json.name}<br>
-                    Altura: ${json.height}<br>
-                    Peso: ${json.weight}
-                `;
-            }).catch(erro => {
-                resultado.innerHTML = erro;
             });
         });
 
