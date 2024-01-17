@@ -1,0 +1,36 @@
+<html>
+    <body>
+        <input id="pokemon">
+        <button id="carregar">carregar</button>
+        <button id="limpar">limpar</button>
+        <p id="resultado"></p>
+    </body>
+    <script>
+        const botao = document.getElementById("carregar");
+        const resultado = document.getElementById("resultado");
+        const pokemon = document.getElementById("pokemon");
+        botao.addEventListener("click", async () => {
+            const valor = pokemon.value.toLowerCase();
+            const resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${valor}`);
+            if(resposta.status !== 200) {
+                resultado.innerHTML = "pokemon nao encontrado";
+            } else {
+                const json = await resposta.json();
+                console.log(json);
+                resultado.innerHTML = `
+                    <img width="100" src="${json.sprites.other.home.front_default || json.sprites.front_default}"><br>
+                    Nome: ${json.name}<br>
+                    Altura: ${json.height}<br>
+                    Peso: ${json.weight}
+                `;
+            }
+        });
+
+
+        const botao2 = document.getElementById("limpar");
+        botao2.addEventListener("click", () => {
+            resultado.innerHTML = "";
+            pokemon.value = "";
+        });
+    </script>
+</html>

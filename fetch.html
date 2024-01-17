@@ -25,6 +25,8 @@
                         `;
                     });
                 }
+            }).catch(erro => {
+                resultado.innerHTML = `${erro}`;
             });
         });
 
