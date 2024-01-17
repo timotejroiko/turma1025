@@ -169,3 +169,28 @@ Promise.all([tarefa1, tarefa2]).then(asDuasTarefas => {
 Promise.race([tarefa1, tarefa2]).then(tarefaQueConcluiuPrimeiro => {
 
 });
+
+
+// utilizando promessas com async/await
+// cria um contexto assincrono usando a palavra chave "async" na hora de criar uma funçao
+async function conteudoAssincrono() { // <-- função assincrona
+    const resultado = await funçãoAssíncrona(); // <-- acessar o resultado diretamente, sem precisar usar o .then()
+    console.log(resultado);
+}
+
+const fn = async () => { // <-- função flecha assincrona
+    const resultado1 = await funçãoAssíncrona(); // <-- primeiro o javascript espera para esse resultado chegar
+    const resultado2 = await funçãoAssíncrona(); // <-- somente depois do resultado ter chegado, é que a segunda tarefa é iniciada
+    console.log(resultado1, resultado2) // e novamente o javascript espera até a segunda tarefa retornar o resultado, antes de prosseguir para a próxima linha
+}
+
+(async () => { // <-- função assincrona auto-executavel
+    const tarefa1 = funçãoAssíncrona(); // <-- criar uma tarefa e salvar na variavel
+    const tarefa2 = funçãoAssíncrona(); // <-- criar segunda tarefa e tambem salvar na variavel
+    const resultados = await Promise.all([tarefa1, tarefa2]); // <-- esperar até as duas tarefas serem concluidas e receber os dois resultados
+    console.log(resultados) // <-- as duas tarefas serão executadas simultaneamente
+})()
+
+
+
+
