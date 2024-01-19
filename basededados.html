@@ -1,0 +1,101 @@
+<html>
+    <body>
+        <select id="chave">
+            <option>livro</option>
+            <option>carro</option>
+            <option>filme</option>
+        </select>
+        <input id="valor" placeholder="valor">
+        <button id="receber">receber</button>
+        <button id="enviar">enviar</button>
+        <p id="resultado"></p>
+    </body>
+    <script>
+        // fetch("link"); // automaticamente faz um pedido do tipo GET
+        // fetch("link", {
+        //     method: "POST" // muda o tipo do pedido para tipo POST
+        //     body: "alguma coisa" // corpo do pedido, somente POST e PUT suportam um corpo
+        //     headers: {} // cabeçalhos do pedido, por exemplo definir o tipo de corpo
+        // })
+
+        const basededados = "https://crudcrud.com/api/fd96135d8cbe4832a909e92f5346b3f3";
+        const enviar = document.getElementById("enviar");
+        const receber = document.getElementById("receber");
+        const paragrafo = document.getElementById("resultado");
+
+        enviar.addEventListener("click", async () => {
+            const chave = document.getElementById("chave");
+            const valor = chave.value;
+            const input2 = document.getElementById("valor");
+            const valor2 = input2.value;
+            const objeto = {
+                nome: valor2
+            };
+            const json = JSON.stringify(objeto); // JSON API
+            const resultado = await fetch(basededados + `/${valor}`, {
+                method: "POST",
+                body: json,
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            const resposta = await resultado.json();
+            paragrafo.innerHTML = `
+                Status: ${resultado.status}<br>
+                Resultado: ${resultado.statusText}<br>
+                Ok: ${resultado.ok}<br>
+                Nome: ${resposta.nome}<br>
+                ID: ${resposta._id}<br>
+            `;
+        });
+
+        receber.addEventListener("click", async () => {
+            const chave = document.getElementById("chave");
+            const valor = chave.value;
+            const resultado = await fetch(basededados + `/${valor}`);
+            const resposta = await resultado.json();
+            paragrafo.innerHTML = `
+                Status: ${resultado.status}<br>
+                Resultado: ${resultado.statusText}<br>
+                Ok: ${resultado.ok}<br>
+                Itens:<br><br>
+                ${resposta.map(item => `
+                    Nome: ${item.nome}<br>
+                    ID: ${item._id}<br>
+                `).join("<br>")}
+            `;
+        });
+
+        /*
+            nosso navegador, e a pagina aberta
+                V                ^
+              enviar          receber
+                V                ^
+             servidor         servidor
+
+
+             CRUD           ->      Criar, Ler (Read), Atualizar (Update), Deletar
+             Metodos        ->      POST,  GET,        PUT,                DELETE
+             Pode Enviar    ->      sim,   não,        sim,                não
+
+
+             "harry potter"
+                    V
+             {
+                nome: "harry potter"
+             }
+             // isso é o que estamos realmente enviando ao servidor
+
+             site
+                -> /livro
+                    ->  [
+                            {
+                                nome: "harry potter"
+                                _id: "um id aleatorio"
+                            }
+                        ]
+                -> /outrapagina
+                    ->  []
+        */
+    </script>
+</html>
