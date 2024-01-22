@@ -1,38 +1,88 @@
 <html>
+    <head>
+        <style>
+            body > div {
+                border: 1px solid gray;
+                border-radius: 20px;
+                margin-bottom: 20px;
+                padding: 20px;
+            }
+        </style>
+    </head>
     <body>
-        <select id="chave">
-            <option>livro</option>
-            <option>carro</option>
-            <option>filme</option>
-        </select>
-        <input id="valor" placeholder="valor">
-        <button id="receber">receber</button>
-        <button id="enviar">enviar</button>
+        <div id="criar">
+            <h2>Criar</h2>
+            <select class="chave">
+                <option>livro</option>
+                <option>carro</option>
+                <option>filme</option>
+            </select>
+            <input class="valor" placeholder="valor">
+            <button class="enviar">criar</button>
+        </div>
+        <div id="listar">
+            <h2>Listar</h2>
+            <select class="chave">
+                <option>livro</option>
+                <option>carro</option>
+                <option>filme</option>
+            </select>
+            <button class="enviar">listar</button>
+        </div>
+        <div id="obter">
+            <h2>Obter</h2>
+            <select class="chave">
+                <option>livro</option>
+                <option>carro</option>
+                <option>filme</option>
+            </select>
+            <input class="valor" placeholder="id">
+            <button class="enviar">obter</button>
+        </div>
+        <div id="atualizar">
+            <h2>Atualizar</h2>
+            <select class="chave">
+                <option>livro</option>
+                <option>carro</option>
+                <option>filme</option>
+            </select>
+            <input class="id" placeholder="id">
+            <input class="valor" placeholder="novo valor">
+            <button class="enviar">atualizar</button>
+        </div>
+        <div id="remover">
+            <h2>Remover</h2>
+            <select class="chave">
+                <option>livro</option>
+                <option>carro</option>
+                <option>filme</option>
+            </select>
+            <input class="id" placeholder="id">
+            <button class="enviar">remover</button>
+        </div>
         <p id="resultado"></p>
     </body>
     <script>
-        // fetch("link"); // automaticamente faz um pedido do tipo GET
-        // fetch("link", {
-        //     method: "POST" // muda o tipo do pedido para tipo POST
-        //     body: "alguma coisa" // corpo do pedido, somente POST e PUT suportam um corpo
-        //     headers: {} // cabeçalhos do pedido, por exemplo definir o tipo de corpo
-        // })
+        // link da base de dados
+        // precisa pegar um link novo a cada 24h
+        const basededados = "https://crudcrud.com/api/4ef33fa15ae94c629e5e0bd026486746";
 
-        const basededados = "https://crudcrud.com/api/fd96135d8cbe4832a909e92f5346b3f3";
-        const enviar = document.getElementById("enviar");
-        const receber = document.getElementById("receber");
-        const paragrafo = document.getElementById("resultado");
+        const resultadoDoPedido = document.getElementById("resultado");
 
-        enviar.addEventListener("click", async () => {
-            const chave = document.getElementById("chave");
-            const valor = chave.value;
-            const input2 = document.getElementById("valor");
-            const valor2 = input2.value;
-            const objeto = {
-                nome: valor2
-            };
-            const json = JSON.stringify(objeto); // JSON API
-            const resultado = await fetch(basededados + `/${valor}`, {
+        const caixinhaDeCriar = document.getElementById("criar");
+        const caixinhaDeListar = document.getElementById("listar");
+        const caixinhaDeObter = document.getElementById("obter");
+        const caixinhaDeAtualizar = document.getElementById("atualizar");
+        const caixinhaDeRemover = document.getElementById("remover");
+
+        // criar itens
+        caixinhaDeCriar.querySelector(".enviar").addEventListener("click", async () => {
+            const chave = caixinhaDeCriar.querySelector(".chave").value;
+            const input2 = caixinhaDeCriar.querySelector(".valor").value;
+            const json = JSON.stringify({ // JSON API
+                nome: input2
+            });
+            const resultado = await fetch(basededados + `/${chave}`, {
                 method: "POST",
                 body: json,
                 headers: {
@@ -40,7 +90,7 @@
                 }
             });
             const resposta = await resultado.json();
-            paragrafo.innerHTML = `
+            resultadoDoPedido.innerHTML = `
                 Status: ${resultado.status}<br>
                 Resultado: ${resultado.statusText}<br>
                 Ok: ${resultado.ok}<br>
@@ -49,12 +99,13 @@
             `;
         });
 
-        receber.addEventListener("click", async () => {
-            const chave = document.getElementById("chave");
+        // listar itens
+        caixinhaDeListar.querySelector(".enviar").addEventListener("click", async () => {
+            const chave = caixinhaDeListar.querySelector(".chave");
             const valor = chave.value;
             const resultado = await fetch(basededados + `/${valor}`);
             const resposta = await resultado.json();
-            paragrafo.innerHTML = `
+            resultadoDoPedido.innerHTML = `
                 Status: ${resultado.status}<br>
                 Resultado: ${resultado.statusText}<br>
                 Ok: ${resultado.ok}<br>
@@ -65,6 +116,86 @@
                 `).join("<br>")}
             `;
         });
+
+        // obter um item específico pelo seu ID
+        caixinhaDeObter.querySelector(".enviar").addEventListener("click", async () => {
+            const chave = caixinhaDeObter.querySelector(".chave").value;
+            const input = caixinhaDeObter.querySelector(".valor").value;
+            try {
+                const resultado = await fetch(basededados + `/${chave}/${input}`);
+                const resposta = await resultado.json();
+                resultadoDoPedido.innerHTML = `
+                    Status: ${resultado.status}<br>
+                    Resultado: ${resultado.statusText}<br>
+                    Ok: ${resultado.ok}<br>
+                    Item:<br><br>
+                    Nome: ${resposta.nome}<br>
+                    ID: ${resposta._id}
+                `;
+            } catch (erro) {
+                resultadoDoPedido.innerHTML = `
+                    Status: erro (provavelmente ID invalido)<br>
+                    Resultado: erro<br>
+                    Ok: erro
+                `;
+            }
+        });
+
+        // atualizar um item específico pelo seu ID
+        caixinhaDeAtualizar.querySelector(".enviar").addEventListener("click", async () => {
+            const chave = caixinhaDeAtualizar.querySelector(".chave").value;
+            const id = caixinhaDeAtualizar.querySelector(".id").value;
+            const input = caixinhaDeAtualizar.querySelector(".valor").value;
+            const json = JSON.stringify({ // JSON API
+                nome: input
+            });
+            const resultado = await fetch(basededados + `/${chave}/${id}`, {
+                method: "PUT",
+                body: json,
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).catch(erro => {
+                return {
+                    status: "erro",
+                    statusText: "erro",
+                    ok: "erro"
+                }
+            });
+            resultadoDoPedido.innerHTML = `
+                Status: ${resultado.status}<br>
+                Resultado: ${resultado.statusText}<br>
+                Ok: ${resultado.ok}<br>
+            `;
+        });
+
+        // remover um item específico pelo seu ID
+        caixinhaDeRemover.querySelector(".enviar").addEventListener("click", async () => {
+            const chave = caixinhaDeRemover.querySelector(".chave").value;
+            const id = caixinhaDeRemover.querySelector(".id").value;
+            const resultado = await fetch(basededados + `/${chave}/${id}`, {
+                method: "DELETE"
+            }).catch(erro => {
+                return {
+                    status: "erro",
+                    statusText: "erro",
+                    ok: "erro"
+                }
+            });
+            resultadoDoPedido.innerHTML = `
+                Status: ${resultado.status}<br>
+                Resultado: ${resultado.statusText}<br>
+                Ok: ${resultado.ok}
+            `;
+        });
+
+        // como configurar o fetch
+        // fetch("link"); // automaticamente faz um pedido do tipo GET
+        // fetch("link", {
+        //     method: "POST" // muda o tipo do pedido para tipo POST
+        //     body: "alguma coisa" // corpo do pedido, somente POST e PUT suportam um corpo
+        //     headers: {} // cabeçalhos do pedido, por exemplo definir o tipo de corpo
+        // })
 
         /*
             nosso navegador, e a pagina aberta
@@ -77,6 +208,7 @@
              CRUD           ->      Criar, Ler (Read), Atualizar (Update), Deletar
              Metodos        ->      POST,  GET,        PUT,                DELETE
              Pode Enviar    ->      sim,   não,        sim,                não
+             Pode Receber   ->      sim,   sim,        não,                não
 
 
              "harry potter"
