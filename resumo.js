@@ -1,6 +1,8 @@
 
-// DOM
+// DOM (document object model)
 // a raiz da pagina
+// permite o javascript interagir com o html
+// especifico dos navegadores
 document
 
 
@@ -14,19 +16,34 @@ document.getElementById("meuid")
 // obs: retorna todos os elementos que contem essa classe
 document.getElementsByClassName("minhaclasse")
 
-// encontrar o elemento pelo seu tipo: <div>
+// encontrar o elemento pelo seu tipo: <div> <p> <h1>
 // obs: retorna todos os elementos desse tipo
-document.getElementsByTagName("div")
+document.getElementsByTagName("h1")
 
 // econtrar o elemento usando a syntaxe do CSS: <div classe="abc">
-document.querySelector(".abc")
+// #id .classe
+// <div id="meuid">
+//     <p classe="abc">
+//         <span classe="xyz"></span> <-- primeiro encontrado
+//         <span classe="xyz"></span>
+//     </p>
+// </div>
+document.querySelector("#meuid .abc .xyz") // retorna apenas o primeiro
 
 // a mesma coisa, mas retorna todos os elementos encontrados
-document.querySelectorAll(".abc")
+// <div id="meuid">
+//     <p classe="abc">
+//         <span classe="xyz"></span>
+//         <span classe="xyz"></span>
+//         <span classe="xyz"></span>
+//     </p>
+// </div>
+document.querySelectorAll("#meuid .abc .xyz") // retorna todos
 
 
 
-// obter o conteudo
+// obter o conteudo de um elemento HTML
+// <p class="abc">texto que está dentro do parágrafo</p>
 
 const elemento = document.querySelector(".abc");
 
@@ -34,7 +51,7 @@ elemento.innerHTML // obtem o HTML interno do elemento como string
 elemento.outerHTML // obtem o HTML incluindo ele mesmo como string
 elemento.textContent // obtem o conteudo textual, sem a estrutura html
 elemento.innerText // obtem o conteudo textual, sem a estrutura html
-elemento.value // obtem o conteudo ou valor de um input ou textarea
+elemento.value // obtem o conteudo ou valor de um input, select, ou textarea
 
 
 
@@ -47,7 +64,7 @@ elemento.parentElement // navega para o elemento mae
 
 elemento.nextElementSibling // navega para o elemento irmao logo a seguir
 // <div classe="container">
-//    <div classe="elemento"></div>    v
+//    <div classe="elemento"></div>   v
 //    <div classe="outro"></div> <-----
 // </div>
 
@@ -57,19 +74,23 @@ elemento.previousElementSibling // navega para o irmao elemento anterior
 //    <div classe="elemento"></div>   ^
 // </div>
 
-elemento.firstElementChild // primeiro elemento contido
+elemento.firstElementChild // primeiro elemento descendente
 // <div classe="elemento">            v
 //    <div classe="outro"></div> <-----
 //    <div classe="outro2"></div>
 // </div>
 
-elemento.lastElementChild // ultimo elemento contido
+elemento.lastElementChild // ultimo elemento descendente
 // <div classe="elemento">            v
 //    <div classe="outro"></div>      v
 //    <div classe="outro2"></div> <----
 // </div>
 
-elemento.children // retorna todos os elementos contidos
+elemento.children // retorna todos os elementos descendentes
+// <div classe="elemento">            v
+//    <div classe="outro"></div>  <----
+//    <div classe="outro2"></div> <----
+// </div>
 
 // versao "node" da mesma coisa
 // um "element" é elemento html, que é um tipo de node
@@ -85,7 +106,6 @@ elemento.childNodes
 
 // atributos
 // ex: <elemento atributo1="valor1" atributo2="valor2">
-
 elemento.getAttribute("atributo1") // retorna valor1
 elemento.hasAttribute("atributo1") // retorna verdadeiro
 elemento.hasAttributes() // retorna verdadeiro se tem atributos
@@ -96,7 +116,7 @@ elemento.attributes() // retorna uma lista de atributos
 
 
 // classes
-
+// <div class="classe1 classe2 classe3"></div>
 elemento.classList.add("minhaclasse") // adiciona uma classe
 elemento.classList.remove("minhaclasse") // remove uma classe
 elemento.classList.contains("minhaclasse") // retorna verdadeiro se o elemento contem a classe
@@ -104,8 +124,27 @@ elemento.classList.toggle("minhaclasse") // adiciona a classe se nao existir, re
 
 
 
+// criação, atribuição, edição e remoção de elementos no html
+// <div class="elemento"></div>
+elemento.innerHTML = "<div>novo html</div>"
+elemento.outerHTML = '<div class="elemento"><div>novo html</div></div>'
+elemento.textContent = "novo html"
+elemento.innerText = "novo html"
+elemento.value = "novo valor"
+// <div></div>
+const novo = document.createElement("div") // criar um novo elemento, desconectado da página
+elemento.appendChild(novo) // inserir o elemento criado, no final do elemento selecionado
+novo.remove() // remove o elemento da página
+
+
+
 // Storage API
 // localStorage e sessionStorage
+// permite salvar dados no navegador do usuario
+// os dados salvos ficam associados ao site que está aberto
+// eles so existem nesse site, nao vao estar disponiveis em outros sites
+// pode ser utilizado por exemplo para salvar formularios para que o usuario nao precise repeti-los
+// caso ele saia da pagina e volte mais tarde
 
 localStorage.getItem("item") // obter item salvo
 localStorage.setItem("item", "valor") // salvar item no navegador do usuario
@@ -113,6 +152,52 @@ localStorage.removeItem("item") // remover item
 localStorage.clear() // remover todos os itens
 
 sessionStorage.x // a mesma coisa, mas só funciona até o usuario fechar a aba
+
+
+
+// Fetch API
+// fetch
+// baseado em programação assincrona, veja mais abaixo
+// permite acessar conteudo remoto da internet
+// por exemplo outros sites e/ou apis remotas
+// desde que o conteudo esteja disponivel para ser acessado por um site
+// existe uma diferença entre acessar um link como usuario e como site
+// o fetch acessa links como site e não como usuario
+const promessa = fetch("https://www.meusite.com/minhapagina.html"); // fetch sempre retorna uma promessa (Promise)
+// acessar o conteudo da promessa com await
+const valordapromessa = await promessa; // só functiona em um contexto async
+// acessar o conteudo da promessa com .then()
+promessa.then(valordapromessa => {
+
+});
+
+// um objeto Response (resposta de um fetch)
+valordapromessa // o objeto Response contem informações sobre o status da conexão
+valordapromessa.status // código do status da pagina
+valordapromessa.statusText // texto associado ao status da pagina
+valordapromessa.text() // baixar o conteudo como texto
+valordapromessa.json() // baixar o conteudo como json
+valordapromessa.blob() // baixar o conteudo como blob (para conteudo binario)
+valordapromessa.arrayBuffer() // baixar o conteudo como buffer (para conteudo binario)
+
+// para baixar o conteudo da página, precisamos utilizar um dos métodos de baixar
+const outrapromessa = valordapromessa.text(); // baixar conteudo da pagina também retorna uma promessa (Promise)
+// usando await (só funciona dentro de um contexto async)
+const valordaoutrapromessa = await outrapromessa;
+// usando .then()
+outrapromessa.then(valordaoutrapromessa => {
+
+});
+valordaoutrapromessa // contem o valor baixado da página
+
+// exemplo de fetch com objeto de configuração
+fetch("https://www.meusite.com/minhapagina.html", {
+    method: "POST",
+    body: "abc",
+    headers: {
+        "algumcabeçalho": "xyz"
+    }
+});
 
 
 
@@ -190,7 +275,3 @@ const fn = async () => { // <-- função flecha assincrona
     const resultados = await Promise.all([tarefa1, tarefa2]); // <-- esperar até as duas tarefas serem concluidas e receber os dois resultados
     console.log(resultados) // <-- as duas tarefas serão executadas simultaneamente
 })()
-
-
-
-
